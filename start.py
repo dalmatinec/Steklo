@@ -121,12 +121,17 @@ async def callback_link(callback: types.CallbackQuery):
             save_user_link(user_id, link_key, int(time.time()))
 
             # Кнопка с ссылкой (зелёная, т.к. это положительное/подтверждающее действие)
+            join_btn_kwargs = {
+                "text": get_message("join_button", "🎟️ Вступить"),
+                "url": link.invite_link,
+                "style": "success"
+            }
+            join_btn_icon = get_message("join_button_icon")
+            if join_btn_icon:
+                join_btn_kwargs["icon_custom_emoji_id"] = join_btn_icon
+
             keyboard = types.InlineKeyboardMarkup(inline_keyboard=[
-                [types.InlineKeyboardButton(
-                    text=get_message("join_button", "🎟️ Вступить"),
-                    url=link.invite_link,
-                    style="success"
-                )]
+                [types.InlineKeyboardButton(**join_btn_kwargs)]
             ])
 
             await callback.bot.send_message(
